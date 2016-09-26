@@ -19,7 +19,7 @@ public enum RewindMode { Transform, Physics}
 
 public class TimeManipulable : MonoBehaviour {
 	public Stack<RewindData> rewindDataStack;
-    RewindData pauseData;
+    public RewindData pauseData;
 	Transform trRef;
 	public Rigidbody rbRef;
     public TimeState timeState;
@@ -59,10 +59,10 @@ public class TimeManipulable : MonoBehaviour {
 
     public virtual void StopPhysicsObject(){
         if (timeState != TimeState.Pause) {
-            print("freezing: "+gameObject.name);
             timeState = TimeState.Pause;
             pause_flag = true;
-			pauseData = new RewindData(transform, GetComponent<Rigidbody>());
+            pauseData = new RewindData(transform, GetComponent<Rigidbody>());
+            print("freezing: " + gameObject.name + " at vector: " + pauseData.position);
             rbRef.isKinematic = true;
             rbRef.Sleep();
         }
@@ -70,7 +70,7 @@ public class TimeManipulable : MonoBehaviour {
 
     public virtual void ResumePhysicsObject(){
         if (timeState == TimeState.Pause) {
-            print("Unfreezing: "+gameObject.name);
+            print("Unfreezing: "+gameObject.name+" at vector:"+pauseData.position);
             timeState = TimeState.Normal;
             pause_flag = false;
 			SetActualData(pauseData, RewindMode.Transform);

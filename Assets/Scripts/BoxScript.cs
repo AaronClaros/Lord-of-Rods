@@ -20,7 +20,6 @@ public class BoxScript : TimeManipulable {
 	void Start () {
         base.Setting();
         renderRef = GetComponent<Renderer>();
-        rbRef.AddForce(moveDirection, ForceMode.VelocityChange);
 	}
 		
 	// Update is called once per frame

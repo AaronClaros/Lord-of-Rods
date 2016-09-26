@@ -34,6 +34,27 @@ public class WeaponManeger : TimeManipulable{
 		    }
         }
 
+        if (Input.GetKey(KeyCode.C)) {
+            if (Input.GetMouseButtonDown(0)){
+			    print("left click down FPC");
+                if (!rewindReady_flag) {
+                    base.SetRewindable();
+                }
+                else {
+                    StartRewind();
+                }
+		    }
+		    if (Input.GetMouseButtonDown(1)){
+                print("right click down FPC");
+                if (!pause_flag) {
+                    StopPhysicsObject();
+                }
+                else {
+                    ResumePhysicsObject();
+                }
+		    }
+        }
+
 
         if (Input.GetKeyDown(KeyCode.E)) {
             if (!pick_flag)
@@ -73,8 +94,9 @@ public class WeaponManeger : TimeManipulable{
             if (objTarget == null)
                 return;
             if (objTarget.tag == "Pickable") {
+                TimeManipulable tmRef = hit.collider.GetComponent<TimeManipulable>();
                 print("trying to pick:" + objTarget.name);
-                if (pickedObject == null) {
+                if (pickedObject == null && !tmRef.pause_flag) {
                     pick_flag = true;
                     pickedObject = objTarget;
                     Rigidbody rbPO = pickedObject.GetComponent<Rigidbody>();
@@ -101,7 +123,7 @@ public class WeaponManeger : TimeManipulable{
         while (pick_flag){
             Ray ray = Camera.main.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0f));
             Vector3 point = ray.origin + (ray.direction * pickDistance);
-            print("pickedObj pos: " + point);
+            //print("pickedObj pos: " + point);
             pickedObject.GetComponent<Rigidbody>().velocity = new Vector3(0.001f,0.001f,0.001f);
             pickedObject.GetComponent<Rigidbody>().MovePosition(point);
             //pickedObject.transform.position = Vector3.Lerp(pickedObject.transform.position, point, pickSmooth);
